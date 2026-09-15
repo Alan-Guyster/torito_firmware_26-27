@@ -2,9 +2,6 @@
 
 // Sesnor class instances
 LowPressureSensor g_low_pressure_sensor;
-HighPressureSensor g_high_pressure_sensor;
-TemperatureSensor g_temperature_sensor;
-LoadCell g_load_cell;
 
 bool sensor_dispatcher_init() {
     //if (!g_low_pressure_sensor.init()) {

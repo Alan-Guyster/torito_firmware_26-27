@@ -1,14 +1,18 @@
 #ifndef HWCONFIG_H
 #define HWCONFIG_H
 
-// Teensy 4.1 uses default I2C Wire pins (SDA=18, SCL=19)
-// Wire.begin() automatically uses these pins
+// List of SPI devices and their configurations and addresses
+#define MS5607_SPI_ADDRESS 0x00 // Replace with actual SPI address
+#define MS5607_CS_PIN 12
 
-#define ADS1115_I2C_ADDR 0x48
+#define RFM96W_SPI_ADDRESS 0x00 // Replace with actual SPI address
+#define RFM96W_CS_PIN 32
+#define RFM96W_RESET_PIN 11
 
-// HX711 load cell amplifier pins and gain
-#define HX711_DOUT_PIN 2 // placeholder for HX711 data pin
-#define HX711_SCK_PIN 3  // placeholder for HX711 clock pin 
-#define HX711_GAIN 128
+#define ICM_20948_SPI_ADDRESS 0x00 // Replace with actual SPI address
+#define ICM_20948_CS_PIN 28
+
+#define BACKUP_SD_SPI_ADDRESS 0x00 // Replace with actual SPI address
+#define BACKUP_SD_CS_PIN 2
 
 #endif // HWCONFIG_H

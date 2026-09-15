@@ -1,6 +1,5 @@
 // src/main.cpp
-#include <Arduino.h>
-#include <Wire.h>
+#include <SPI.h>
 #include <hwconfig.h>
 #include <daqloop.h>
 #include <ringbuffer.h>
@@ -29,8 +28,9 @@ void setup() {
     delay(2000);
     Serial.println("DAQ System Starting...");
     
-    // Initialize I2C (Teensy 4.1 uses default pins SDA=18, SCL=19)
-    Wire.begin();
+    // Initialize SPI (Teensy 4.1 uses default pins SCK=13, MOSI=11, MISO=12)
+    // Make sure to set all CS pins to HIGH before starting SPI
+    SPI.begin();
     
     // Initialize sensors
     while (!sensor_dispatcher_init()) {
