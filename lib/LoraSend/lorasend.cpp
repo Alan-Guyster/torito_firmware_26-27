@@ -107,9 +107,9 @@ size_t LoraSend::send_all() {
 
 // Pack header fields tightly (no compiler padding) in little-endian order.
 size_t LoraSend::serialize_frame_header(const SampleFrame &frame, uint8_t *out, size_t out_len) {
-    // required size: sensor_count(1) + timestamp(4) + seq(4) + valid_mask(1) + status_bits(1) + solenoid_state(2) +
+    // required size: sensor_count(1) + timestamp(4) + seq(4) + valid_mask(1) + status_bits(1) +
     // raw_adc[SENSOR_COUNT] (2 bytes each)
-    const size_t required = 1 + 4 + 4 + 1 + 1 + sizeof(frame.solenoid_state) + (sizeof(frame.raw_adc));
+    const size_t required = 1 + 4 + 4 + 1 + 1 + (sizeof(frame.raw_adc));
     if (out_len < required || required > MAX_SERIALIZED_HEADER) return 0;
 
     size_t pos = 0;
@@ -128,13 +128,6 @@ size_t LoraSend::serialize_frame_header(const SampleFrame &frame, uint8_t *out, 
 
     out[pos++] = frame.valid_mask;
     out[pos++] = frame.status_bits;
-
-    // solenoid_state as little-endian uint16_t
-    {
-        uint16_t s = frame.solenoid_state;
-        out[pos++] = (uint8_t)(s & 0xFF);
-        out[pos++] = (uint8_t)((s >> 8) & 0xFF);
-    }
 
     // raw_adc[] as little-endian uint16_t
     for (size_t i = 0; i < SENSOR_COUNT; ++i) {

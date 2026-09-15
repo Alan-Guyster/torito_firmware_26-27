@@ -47,7 +47,7 @@ Parsers in **`LoraModule::receive_data_hexstr`** (Teensy) and **`LoRaModule::rec
 
 [`LoraSend`](../../lib/LoraSend/lorasend.cpp) **does not** send the full `SampleFrame` over the air. It serializes a **fixed header** (up to **20 bytes**):
 
-- `timestamp_us` (4), `seq` (4), `valid_mask` (1), `status_bits` (1), `solenoid_state` (2), `raw_adc[SENSOR_COUNT]` (2 bytes × count)
+- `timestamp_us` (4), `seq` (4), `valid_mask` (1), `status_bits` (1), `raw_adc[SENSOR_COUNT]` (2 bytes × count)
 
 **Processed pressure values** in `payload[]` are **not** included in this serialization (verify against your ground decoder).
 

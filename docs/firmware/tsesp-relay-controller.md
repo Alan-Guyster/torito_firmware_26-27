@@ -32,7 +32,7 @@ See [Relay bitmap](../protocols/relay-bitmap.md).
 - **Write:** expects **exactly 2 bytes**; other lengths are drained and ignored.  
 - **Request:** returns **high then low byte** of `lastI2CValue`.
 
-This aligns with **`SolenoidReceive`** on the Teensy ([`lib/SolenoidReceive`](../../lib/SolenoidReceive)), which performs a **2-byte** `requestFrom` to the same address when the mux selects that downstream bus.
+This exposes a simple **2-byte I2C state word** that any master can read or write.
 
 ## Configuration alignment
 

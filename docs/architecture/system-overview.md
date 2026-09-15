@@ -10,11 +10,10 @@ This repository contains firmware for the **Torito** EECS stack: a **data acquis
 
 ![Torito firmware — logical components and data paths](system-diagram.png)
 
-*Figure: Teensy 4.1 DAQ, I2C mux and sensors, SD and LoRa paths, LoRa RF link, and XIAO ESP32-S3 relay / I2C slave.*
+*Figure: Teensy 4.1 DAQ sensors, SD and LoRa paths, LoRa RF link, and XIAO ESP32-S3 relay / I2C slave.*
 
 - **Teensy (`teensy`)**  
-  - Samples pressure channels through an **I2C mux** (TCA9548A at `0x70`) to an **ADS1115**.  
-  - Reads **solenoid/relay state** from a remote I2C device (same bus topology; mux channel in [`hwconfig.h`](../../lib/DataTypes/hwconfig.h)).  
+  - Samples pressure channels from an **ADS1115** over I2C.  
   - Pushes structured **`SampleFrame`** records through **ring buffers**; a **dispatcher** copies frames toward **SD** and **LoRa** queues.  
   - Sends **compressed telemetry** over LoRa (header serialization in `LoraSend`, not full `SampleFrame`).
 
@@ -29,7 +28,7 @@ This repository contains firmware for the **Torito** EECS stack: a **data acquis
 
 ## Data flow (Teensy)
 
-1. **`daq_step()`** ([`lib/DAQLoop`](../../lib/DAQLoop)) builds one `SampleFrame` per tick: sensor reads, solenoid read, sequence and timestamp.  
+1. **`daq_step()`** ([`lib/DAQLoop`](../../lib/DAQLoop)) builds one `SampleFrame` per tick: sensor reads, sequence and timestamp.  
 2. Frame is **`push`ed** to `daq_buffer`.  
 3. **`dispatcher_thread_step()`** ([`lib/BufferDispatcher`](../../lib/BufferDispatcher)) **pops** from `daq_buffer`, **pushes** to `sd_buffer` for every frame, and **pushes** to `lora_buffer` every **10th** frame.  
 4. **`SDWrite::data()`** batches binary frames to a file (default `data.bin` on built-in SD).  

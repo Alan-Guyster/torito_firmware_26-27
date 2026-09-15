@@ -1,7 +1,7 @@
 =========
 i2c_write
 =========
-Mainly being used for the mux to select a channel and switch/listen to it
+Generic helper for small I2C write operations
 
 =========================
 i2c_read / i2c_write_read

@@ -2,11 +2,9 @@
 
 [← Back to documentation index](../README.md)
 
-## Teensy (master read)
+## Teensy
 
-[`SolenoidReceive`](../../lib/SolenoidReceive/solenoidreceive.cpp) performs **`Wire.requestFrom(slave, 2)`** and combines high/low bytes **MSB first** into `uint16_t`. The DAQ selects the mux channel first when [`SOLENOID_MUX_CHANNEL`](../../lib/DataTypes/hwconfig.h) is not `0xFF` ([`daqloop.cpp`](../../lib/DAQLoop/daqloop.cpp)).
-
-- **Address:** `SOLENOID_I2C_ADDR` (default **`0x09`** in `hwconfig.h`).
+The current Teensy DAQ firmware version does **not** include an I2C master read path for the relay/solenoid state word.
 
 ## Torito ESP (slave)
 
@@ -17,4 +15,4 @@
 
 ## End-to-end
 
-Teensy **reads** the state the ESP **last applied** (LoRa or I2C write). Keep **bit semantics** aligned with [relay bitmap](relay-bitmap.md) and LoRa payloads.
+The Torito ESP maintains the relay state word locally and exposes it over I2C for any external master. Keep **bit semantics** aligned with [relay bitmap](relay-bitmap.md) and LoRa payloads.

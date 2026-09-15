@@ -7,6 +7,7 @@ All three environments use **115200** baud on the USB CDC serial port unless you
 ## Teensy (`teensy`)
 
 - **Boot messages:** mux/sensor init, SD status, LoRa warnings, `DAQ Ready!`.  
+- **Boot messages:** sensor init, SD status, LoRa warnings, `DAQ Ready!`.  
 - **`loop dt=`** — time between iterations of `loop()` (ms); use to spot scheduling pressure.  
 - **`ENABLE_PRESSURE_SERIAL`** in [`sensorconfig.h`](../../lib/DataTypes/sensorconfig.h): when **`1`**, prints one tab-separated line of PSI values per DAQ frame (sensor order follows `sensor_table`). When **`0`**, that block is compiled out.
 

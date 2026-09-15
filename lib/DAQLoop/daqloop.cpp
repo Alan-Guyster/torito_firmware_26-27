@@ -6,7 +6,6 @@ static uint32_t tick = 0;
 
 // External buffers (declared in main)
 extern RingBuffer daq_buffer;
-extern SolenoidReceive solenoid_receive;
 
 void daq_init() {
     seq = 0;
@@ -27,16 +26,7 @@ void daq_step() {
         if ((tick % desc.period_ticks) != 0) {
             continue;
         }
-        // select mux channel for sensor
-        // Select MUX channel if needed (DAQ owns bus control)
-        if (desc.mux_channel != NO_MUX) {
-            if (!mux_select(desc.bus_id, desc.mux_channel)) {
-                frame.status_bits |= MUX_ERR;
-                continue;
-            }
-        }
-        // reading sensor
-        // Read sensor (sensor just reads I2C, doesn't touch MUX)
+        // Read the sensor directly from its configured I2C address.
         int32_t processed_value;
         int16_t raw_adc;
         if (sensor_read_dispatch(desc, processed_value, raw_adc)) {
@@ -44,33 +34,10 @@ void daq_step() {
             frame.raw_adc[desc.id] = raw_adc;
             frame.valid_mask |= (1 << desc.id);
         } else {
-            frame.status_bits |= I2C_ERR;
+            frame.status_bits |= SPI_ERR;
         }
     }
 
-    // DAQ controls the I2C mux selection for solenoid reads (owned bus control).
-    // If the mux selection fails, mark MUX_ERR and keep the last-cached solenoid value.
-    // reading solenoids via SolenoidReceive
-    {
-        uint16_t cur = 0;
-        if (SOLENOID_MUX_CHANNEL != 0xFF) {
-            if (!mux_select(0, SOLENOID_MUX_CHANNEL)) {
-                frame.status_bits |= MUX_ERR;
-                frame.solenoid_state = solenoid_receive.get_cached_state();
-            } else {
-                if (!solenoid_receive.read(cur)) {
-                    frame.status_bits |= I2C_ERR;
-                }
-                frame.solenoid_state = solenoid_receive.get_cached_state();
-            }
-        } else {
-            if (!solenoid_receive.read(cur)) {
-                frame.status_bits |= I2C_ERR;
-            }
-            frame.solenoid_state = solenoid_receive.get_cached_state();
-        }
-    }
-    
     // Push to DAQ buffer (every frame)
     if (!daq_buffer.push(&frame)) {
         frame.status_bits |= OVERRUN;

@@ -11,8 +11,7 @@ valid data by setting bits within the bytes.
         valid_mask would contain 0x000D. (1101)
         A set bit means the sensor is working.
 status_bits: Will contain specific error codes for various
-    states, such as: mux failing resulting in MUX_ERR,
-    a sensor failing resulting in an I2C_ERR,
+    states, such as: a sensor failing resulting in an SPI_ERR,
     a buffer overrun resulting in OVERRUN.
     Each error has a specific binary code.
 payload[]: Contains all calibrated sensor data for each
@@ -35,9 +34,8 @@ enum type - sensorType: enumerator for sensor types, add new
     sensor types here. Specifically used to give a meaningful
     name to sensor types rather than a list of 0-9.
 bus_id: The bus the sensor is attached to. Mainly here for
-    future proofing when we add in new muxes.
-mux_channel: The channel on the mux that connects to the mux.
-i2c_address: The address of the sensor on the mux.
+    future proofing when we add in new buses.
+i2c_address: The I2C address of the sensor.
 adc_channel: The channel to communicate to the adc.
 period_ticks: The period in which the sensor is read in the
     DAQLoop. If the loop is running at 20Hz, then a sensor

@@ -6,7 +6,7 @@ Firmware for **Torito EECS**: a multi-target **[PlatformIO](https://platformio.o
 
 | Area | Description |
 |------|-------------|
-| **Teensy 4.1** (`env:teensy`) | DAQ loop, TCA9548A mux, ADS1115 pressure, solenoid state over I2C, SD logging, LoRa send |
+| **Teensy 4.1** (`env:teensy`) | DAQ loop, ADS1115 pressure, SD logging, LoRa send |
 | **GSC ESP32-S3** (`env:gscesp`) | Dual UART bridge: two LoRa modules ↔ USB (AT commands, binary-framed RX to host) |
 | **Torito ESP32-S3** (`env:tsesp`) | LoRa receive → 16-bit relay command; I2C slave at `0x09` for the same state word |
 | **`lib/`** | Shared modules: DAQ, ring buffers, dispatcher, LoRa (Teensy vs ESP variants), SD writer, sensors |
@@ -30,7 +30,7 @@ All structured documentation lives under **[`docs/`](docs/README.md)**:
 | [**Relay bitmap**](docs/protocols/relay-bitmap.md) | 16-bit command encoding |
 | [**I2C solenoid word**](docs/protocols/i2c-solenoid.md) | Teensy ↔ ESP 2-byte state |
 | [**SampleFrame reference**](docs/reference/sample-frame.md) | Binary DAQ record |
-| [**Configuration headers**](docs/reference/configuration-headers.md) | Where to change IDs, mux, LoRa |
+| [**Configuration headers**](docs/reference/configuration-headers.md) | Where to change IDs and LoRa |
 | [**Ring buffers**](docs/reference/ring-buffers-and-dispatcher.md) | DAQ → SD / LoRa fan-out |
 | [**Libraries index**](docs/libraries/index.md) | All `lib/` modules |
 | [**Roadmap / follow-ups**](docs/roadmap.md) | Safety, testing, known gaps |

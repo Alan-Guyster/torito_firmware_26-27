@@ -15,11 +15,9 @@ PlatformIO compiles each subfolder under [`lib/`](../../lib) as a project librar
 | **LoRaModule** | Teensy AT LoRa (`Serial5`) + `lora_config.h` | [README](../../lib/LoRaModule/README.md) |
 | **LoraSend** | Header serialization, LoRa send, backoff | [README](../../lib/LoraSend/README.md) |
 | **LowPressure** | ADS1115 low-pressure scaling | [README](../../lib/LowPressure/README.md) |
-| **MuxDriver** | TCA9548A @ `0x70` | [README](../../lib/MuxDriver/README.md) |
 | **RingBuffer** | `SampleFrame` queue | [README](../../lib/RingBuffer/README.md) |
 | **SDWrite** | SD writer for `data.bin` | [README](../../lib/SDWrite/README.md) |
 | **SensorDispatcher** | Init + dispatch by sensor type | [README](../../lib/SensorDispatcher/README.md) |
-| **SolenoidReceive** | 2-byte I2C solenoid state | [README](../../lib/SolenoidReceive/README.md) |
 | **Temperature** | ADS1115 °C path; not in dispatcher yet | [README](../../lib/Temperature/README.md) |
 
 **Index of all libraries:** [`lib/README`](../../lib/README)

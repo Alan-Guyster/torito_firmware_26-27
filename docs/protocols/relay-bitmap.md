@@ -32,7 +32,7 @@ Always interpret together with **`RELAY_MSB_BIT`**: e.g. **`0x8000`** sets valid
 
 ## Consistency with DAQ
 
-The Teensy records **`solenoid_state`** in each `SampleFrame` ([`SampleFrame.h`](../../lib/DataTypes/SampleFrame.h)) from **`SolenoidReceive`** — a **2-byte** value reflecting what the I2C slave last reported / commanded. Ground software should use the same bit semantics as the ESP relay firmware when decoding logs and live RF.
+This relay word is maintained and applied by the Torito ESP firmware. Ground software should use the same bit semantics as the ESP relay firmware when decoding logs and live RF.
 
 ## See also
 
