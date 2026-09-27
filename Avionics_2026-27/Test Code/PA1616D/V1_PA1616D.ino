@@ -17,12 +17,12 @@
  *       Requires Adafruit GPS Library.
  */
 //------------------------------------------------------------------------------
-
+#include "V1_PA1616D.h"
 
 //------------------------------------------------------------------------------
 // Global Objects
 //------------------------------------------------------------------------------
-GPSReader gpsReader;
+GPSReader gps;
 uint32_t  lastPrintTime = 0;
 
 //------------------------------------------------------------------------------
@@ -40,7 +40,7 @@ void setup()
    while (!Serial)
       delay(10);
 
-   gpsReader.begin();
+   gps.begin();
    Serial.println("SOAR USF - GPS Reader (Serial Only)");
    Serial.println("---");
 }
@@ -55,14 +55,14 @@ void setup()
  */
 void loop()
 {
-   gpsReader.update();
+   gps.update();
 
    if (millis() - lastPrintTime >= PRINT_INTERVAL)
    {
       lastPrintTime = millis();
 
-      if (gpsReader.hasFix())
-         gpsReader.print();
+      if (gps.hasFix())
+         gps.print();
       else
          Serial.println("Waiting for GPS fix...");
    }
