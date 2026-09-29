@@ -62,8 +62,7 @@ public:
       Serial.print("Max Altitude:  "); Serial.print(maxAltitude); Serial.println(" m");
       Serial.println("---");
    }
-   private:
-    const int   MS5607_CS_PIN      = 10;
-    const int   SERIAL_BAUD_RATE   = 115200;
-    const int   READ_INTERVAL      = 100;
+   const int   MS5607_CS_PIN      = 10;
+   const int   SERIAL_BAUD_RATE   = 115200;
+   const int   READ_INTERVAL      = 100;
 };

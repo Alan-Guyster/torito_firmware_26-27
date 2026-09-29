@@ -61,8 +61,7 @@ public:
       Serial.print("Fix Quality: "); Serial.println(fixQuality());
       Serial.println("---");
    }
-   private:
-    const int   GPS_BAUD_RATE      = 9600;
-    const int   SERIAL_BAUD_RATE   = 115200;
-    const int   PRINT_INTERVAL     = 100;  // milliseconds
+   const int   GPS_BAUD_RATE      = 9600;
+   const int   SERIAL_BAUD_RATE   = 115200;
+   const int   PRINT_INTERVAL     = 100;  // milliseconds
 };
