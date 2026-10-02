@@ -1,13 +1,15 @@
 #include <SPI.h>
 #include <RH_RF95.h>
 #include <Adafruit_GPS.h>
-#include <SD.h>
+#include <SdFat.h>
 
 // ─── Constants ───────────────────────────────────────────────────────────────
-const int   RFM96W_CS_PIN    = 8;
-const int   RFM96W_RST_PIN   = 9;
-const int   RFM96W_INT_PIN   = 4;
-const int   SD_CS_PIN        = 2;
+#define RFM96W_CS_PIN  40
+#define RFM96W_RST_PIN 9
+#define RFM96W_INT_PIN 2
+#define REG_HOP_PERIOD 0x24
+#define REG_DIOMAPPING1 0x40
+// const int   SD_CS_PIN        = 2;
 const float RF_FREQUENCY     = 433.0;
 const int   SERIAL_BAUD_RATE = 115200;
 const int   GPS_BAUD_RATE    = 115200;
@@ -51,35 +53,35 @@ public:
 };
 
 // ─── SDLogger Class ───────────────────────────────────────────────────────────
-class SDLogger
-{
-public:
-   bool begin()
-   {
-      return SD.begin(SD_CS_PIN);
-   }
+// class SDLogger
+// {
+// public:
+//    bool begin()
+//    {
+//       return SdFat.begin(SD_CS_PIN);
+//    }
 
-   void log(float lat, float lon, float alt, float spd, int sats, int fix, int rssi, float dist)
-   {
-      File dataFile = SD.open("receiver_log.csv", FILE_WRITE);
-      if (dataFile)
-      {
-         dataFile.print(lat, 6); dataFile.print(",");
-         dataFile.print(lon, 6); dataFile.print(",");
-         dataFile.print(alt);    dataFile.print(",");
-         dataFile.print(spd);    dataFile.print(",");
-         dataFile.print(sats);   dataFile.print(",");
-         dataFile.print(fix);    dataFile.print(",");
-         dataFile.print(rssi);   dataFile.print(",");
-         dataFile.println(dist);
-         dataFile.close();
-      }
-      else
-      {
-         Serial.println("ERROR: Could not write to SD card.");
-      }
-   }
-};
+//    void log(float lat, float lon, float alt, float spd, int sats, int fix, int rssi, float dist)
+//    {
+//       File dataFile = SdFat.open("receiver_log.csv", FILE_WRITE);
+//       if (dataFile)
+//       {
+//          dataFile.print(lat, 6); dataFile.print(",");
+//          dataFile.print(lon, 6); dataFile.print(",");
+//          dataFile.print(alt);    dataFile.print(",");
+//          dataFile.print(spd);    dataFile.print(",");
+//          dataFile.print(sats);   dataFile.print(",");
+//          dataFile.print(fix);    dataFile.print(",");
+//          dataFile.print(rssi);   dataFile.print(",");
+//          dataFile.println(dist);
+//          dataFile.close();
+//       }
+//       else
+//       {
+//          Serial.println("ERROR: Could not write to SD card.");
+//       }
+//    }
+// };
 
 // ─── RadioReceiver Class ──────────────────────────────────────────────────────
 class RadioReceiver
@@ -91,7 +93,9 @@ public:
 
    bool begin()
    {
+      
       pinMode(RFM96W_RST_PIN, OUTPUT);
+      digitalWrite(RFM96W_RST_PIN, HIGH);
       digitalWrite(RFM96W_RST_PIN, LOW);
       delay(10);
       digitalWrite(RFM96W_RST_PIN, HIGH);
@@ -103,6 +107,9 @@ public:
       radio.setTxPower(-4, false);
       radio.setSignalBandwidth(125000);
       radio.setSpreadingFactor(7);
+      radio.setModeRx();
+      uint8_t hopPeriodSymbols = 0x1A; // Example slot length
+      radio.spiWrite(REG_HOP_PERIOD, hopPeriodSymbols);
       return true;
    }
 
@@ -125,7 +132,7 @@ public:
 
 // ─── Global Objects ───────────────────────────────────────────────────────────
 GPSReader      receiverGPS;
-SDLogger       sdLogger;
+// SDLogger       sdLogger;
 RadioReceiver  receiver;
 
 // ─── setup ────────────────────────────────────────────────────────────────────
@@ -136,14 +143,14 @@ void setup()
       delay(10);
 
    Serial.println("SOAR USF - Main Receiver V1");
-
+   SPI.begin();
    receiverGPS.begin();
 
-   if (!sdLogger.begin())
-   {
-      Serial.println("ERROR: SD card init failed!");
-      while (1);
-   }
+   // if (!sdLogger.begin())
+   // {
+   //    Serial.println("ERROR: SD card init failed!");
+   //    while (1);
+   // }
 
    if (!receiver.begin())
    {
@@ -160,7 +167,7 @@ void loop()
 {
    receiverGPS.update();
 
-   if (receiver.available())
+   if (receiver.available()) 
    {
       float rocketLat = 0, rocketLon = 0, altitude = 0, speed = 0;
       int   satellites = 0, fixQuality = 0;
@@ -189,7 +196,7 @@ void loop()
             Serial.println("Distance:    Waiting for receiver GPS fix...");
          }
 
-         sdLogger.log(rocketLat, rocketLon, altitude, speed, satellites, fixQuality, rssi, dist);
+         // sdLogger.log(rocketLat, rocketLon, altitude, speed, satellites, fixQuality, rssi, dist);
          Serial.println("---");
       }
       else
